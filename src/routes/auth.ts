@@ -2,12 +2,13 @@ import express from "express";
 import authController from "../controllers/authController";
 
 import { checkJwt } from "../middleware/auth";
+import { validateSignUpRequest } from "../middleware/validation";
 
 const route = express.Router();
 
 route.post("/sign-in", authController.signIn);
 
-route.post("/sign-up", authController.signUp);
+route.post("/sign-up", validateSignUpRequest, authController.signUp);
 
 route.post("/refresh-token", authController.refreshToken);
 
