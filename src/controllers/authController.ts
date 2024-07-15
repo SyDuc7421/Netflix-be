@@ -128,9 +128,19 @@ const refreshToken = async (req: Request, res: Response) => {
   jwt.verify(
     refreshToken,
     process.env.REFRESH_TOKEN_SECRET as string,
-    (error: any, infos: any) => {
+    async (error: any, infos: any) => {
       if (error) {
         console.log(error);
+        if (error.name === "TokenExpiredError") {
+          // Delete refresh token if it has expired
+          const currentToken = await Token.findOne({ token: refreshToken });
+          if (currentToken) {
+            await currentToken.deleteOne();
+            return res.status(403).json({
+              message: "Refresh token has expired.",
+            });
+          }
+        }
         return res.status(403).json({
           message: "Refresh token is incorrect.",
         });
@@ -149,7 +159,7 @@ const logout = async (req: Request, res: Response) => {
   const currentToken = await Token.findOne({ email });
 
   if (!currentToken) {
-    return res.status(403).json({ message: "Forbidden" });
+    return res.status(403).json({ message: "Forbidden." });
   }
 
   await currentToken.deleteOne();
