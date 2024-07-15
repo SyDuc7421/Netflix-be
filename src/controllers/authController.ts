@@ -53,7 +53,7 @@ const signUp = async (req: Request, res: Response) => {
 
     if (existingUser) {
       return res.status(400).json({
-        message: "User already exist.",
+        message: "User or email already exist.",
       });
     }
 
@@ -128,15 +128,16 @@ const refreshToken = async (req: Request, res: Response) => {
   jwt.verify(
     refreshToken,
     process.env.REFRESH_TOKEN_SECRET as string,
-    (error: any, email: any) => {
+    (error: any, infos: any) => {
       if (error) {
         console.log(error);
         return res.status(403).json({
           message: "Refresh token is incorrect.",
         });
       }
+
       return res.status(200).json({
-        accessToken: generateAccessToken(email),
+        accessToken: generateAccessToken(infos.email),
       });
     }
   );

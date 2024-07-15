@@ -20,13 +20,12 @@ export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
   jwt.verify(
     token,
     process.env.ACCESS_TOKEN_SECRET as string,
-    (error: any, info: any) => {
+    (error: any, infos: any) => {
       if (error) {
         console.log(error);
         return res.status(403).json({ message: error });
       }
-
-      req.email = info.email.email as string;
+      req.email = infos.email as string;
       return next();
     }
   );

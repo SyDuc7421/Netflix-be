@@ -30,5 +30,5 @@ app.get("/health", async (req: Request, res: Response) => {
 app.use("/api/auth", AuthRoute);
 
 app.listen(3000, () => {
-  console.log("Server started on localhost:7000");
+  console.log("Server started on localhost:3000");
 });
