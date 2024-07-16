@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/user";
 import Token from "../models/token";
+import Account from "../models/account";
 
 const signIn = async (req: Request, res: Response) => {
   try {
@@ -34,7 +35,6 @@ const signIn = async (req: Request, res: Response) => {
     return res.status(200).json({
       accessToken: generateAccessToken(currentUser.email),
       refreshToken: refreshToken,
-      username: currentUser.username,
       email: currentUser.email,
     });
   } catch (error) {
@@ -57,7 +57,21 @@ const signUp = async (req: Request, res: Response) => {
       });
     }
 
-    const newUser = new User(req.body);
+    const userInfos = {
+      email: req.body.email,
+      password: req.body.password,
+    };
+
+    const newUser = new User(userInfos);
+
+    await newUser.save();
+
+    const newAccount = new Account({ accountName: req.body.username });
+    newAccount.userId = newUser._id;
+    await newAccount.save();
+
+    newUser.owner = newAccount._id;
+    newUser.accounts.push(newAccount._id);
     await newUser.save();
 
     return res.status(201).json(newUser.toObject());

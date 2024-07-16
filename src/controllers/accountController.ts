@@ -24,10 +24,11 @@ const createAccount = async (req: Request, res: Response) => {
     const newAccount = new Account(req.body);
     newAccount.userId = currentUser._id;
 
-    await newAccount.save().then(async (account) => {
-      currentUser.accounts.push(account._id);
-      await currentUser.save();
-    });
+    await newAccount.save();
+
+    currentUser.accounts.push(newAccount._id);
+    await currentUser.save();
+
     return res.status(201).json(newAccount.toObject());
   } catch (error) {
     console.log(error);
