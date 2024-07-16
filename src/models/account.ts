@@ -2,36 +2,32 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const userSchema = new Schema({
-  username: {
+const accountSchema = new Schema({
+  accountName: {
     type: String,
     required: true,
   },
-  email: {
-    type: String,
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
     required: true,
-    unique: true,
   },
-  password: {
+  type: {
     type: String,
-    required: true,
+    default: "Default",
   },
   createdAt: {
     type: String,
     default: Date.now().toString(),
   },
-  enable: {
-    type: Boolean,
-    default: true,
-  },
-  accounts: [
+  favorites: [
     {
       type: Schema.Types.ObjectId,
-      ref: "Account",
+      ref: "Movie",
     },
   ],
 });
 
-const User = mongoose.model("User", userSchema);
+const Account = mongoose.model("Account", accountSchema);
 
-export default User;
+export default Account;

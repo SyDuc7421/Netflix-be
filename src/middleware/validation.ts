@@ -1,7 +1,7 @@
 import { body, validationResult } from "express-validator";
 import { Request, Response, NextFunction } from "express";
 
-const handleValidationErrors = (
+const handleValidationErrors = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -36,6 +36,15 @@ export const validateSignUpRequest = [
     .withMessage("Password must contain at least one number.")
     .notEmpty()
     .withMessage("Password is required."),
+
+  handleValidationErrors,
+];
+
+export const validateCreateAccountRequest = [
+  body("accountName")
+    .isString()
+    .notEmpty()
+    .withMessage("Account name can not be left blank."),
 
   handleValidationErrors,
 ];
