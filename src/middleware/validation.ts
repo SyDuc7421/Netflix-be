@@ -1,7 +1,7 @@
 import { body, validationResult } from "express-validator";
 import { Request, Response, NextFunction } from "express";
 
-const handleValidationErrors = (
+const handleValidationErrors = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -36,6 +36,44 @@ export const validateSignUpRequest = [
     .withMessage("Password must contain at least one number.")
     .notEmpty()
     .withMessage("Password is required."),
+
+  handleValidationErrors,
+];
+
+export const validateCreateAccountRequest = [
+  body("accountName")
+    .isString()
+    .notEmpty()
+    .withMessage("Account name can not be left blank."),
+
+  handleValidationErrors,
+];
+
+export const validateAddMovieRequest = [
+  body("title")
+    .isString()
+    .notEmpty()
+    .withMessage("Title can not be left blank"),
+  body("description")
+    .isString()
+    .notEmpty()
+    .withMessage("Description can not be left blank"),
+  body("videoUrl")
+    .isString()
+    .notEmpty()
+    .withMessage("Video URL can not be left blank"),
+  body("thumbnailUrl")
+    .isString()
+    .notEmpty()
+    .withMessage("Thumbnail URL can not be left blank"),
+  body("genre")
+    .isString()
+    .notEmpty()
+    .withMessage("Genre can not be left blank"),
+  body("duration")
+    .isString()
+    .notEmpty()
+    .withMessage("Duration can not be left blank"),
 
   handleValidationErrors,
 ];

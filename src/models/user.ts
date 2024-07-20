@@ -3,9 +3,8 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-  username: {
-    type: String,
-    required: true,
+  owner: {
+    type: Schema.Types.ObjectId,
   },
   email: {
     type: String,
@@ -16,6 +15,20 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  createdAt: {
+    type: String,
+    default: Date.now().toString(),
+  },
+  enable: {
+    type: Boolean,
+    default: true,
+  },
+  accounts: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Account",
+    },
+  ],
 });
 
 const User = mongoose.model("User", userSchema);
