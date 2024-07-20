@@ -6,6 +6,7 @@ const movieSchema = new Schema({
   title: {
     type: String,
     required: true,
+    unique: true,
   },
   description: {
     type: String,
@@ -15,7 +16,7 @@ const movieSchema = new Schema({
     type: String,
     required: true,
   },
-  thumbnail: {
+  thumbnailUrl: {
     type: String,
     required: true,
   },
@@ -25,6 +26,14 @@ const movieSchema = new Schema({
   duration: {
     type: String,
     default: "1 minute",
+  },
+  createdAt: {
+    type: String,
+    default: Date.now().toString(),
+  },
+  updatedAt: {
+    type: String,
+    default: Date.now().toString(),
   },
   // TODO: A movie belong to unique user
 });

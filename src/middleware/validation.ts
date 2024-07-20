@@ -48,3 +48,32 @@ export const validateCreateAccountRequest = [
 
   handleValidationErrors,
 ];
+
+export const validateAddMovieRequest = [
+  body("title")
+    .isString()
+    .notEmpty()
+    .withMessage("Title can not be left blank"),
+  body("description")
+    .isString()
+    .notEmpty()
+    .withMessage("Description can not be left blank"),
+  body("videoUrl")
+    .isString()
+    .notEmpty()
+    .withMessage("Video URL can not be left blank"),
+  body("thumbnailUrl")
+    .isString()
+    .notEmpty()
+    .withMessage("Thumbnail URL can not be left blank"),
+  body("genre")
+    .isString()
+    .notEmpty()
+    .withMessage("Genre can not be left blank"),
+  body("duration")
+    .isString()
+    .notEmpty()
+    .withMessage("Duration can not be left blank"),
+
+  handleValidationErrors,
+];
