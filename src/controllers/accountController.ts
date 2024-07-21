@@ -134,14 +134,62 @@ const addFavoriteMovie = async (req: Request, res: Response) => {
     currentAccount.favorites.push(movieId);
     await currentAccount.save();
 
-    return res
-      .status(200)
-      .json({ message: "Movie has been added to favorites." });
+    return res.status(200).json({ message: "Movie has been added favorites." });
   } catch (error) {
     console.log(error);
     return res
       .status(500)
-      .json({ message: "Error failed to add favotire movie." });
+      .json({ message: "Error failed to add favorite movie." });
+  }
+};
+
+const removeFavoriteMovie = async (req: Request, res: Response) => {
+  try {
+    const email = req.email;
+    if (!email) {
+      return res.status(403).json({ message: "Unknown user registration." });
+    }
+
+    const currentUser = await User.findOne({ email });
+    if (!currentUser) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    const accountId = req.params.accountId;
+    if (!accountId) {
+      return res.status(404).json({ message: "Account not found." });
+    }
+    const currentAccount = await Account.findById(accountId);
+    if (!currentAccount) {
+      return res.status(404).json({ message: "Account not found." });
+    }
+
+    const movieId = req.body.movieId;
+    if (!movieId) {
+      return res.status(404).json({ message: "Movie not found." });
+    }
+    const currentMovie = await Movie.findById(movieId);
+    if (!currentMovie) {
+      return res.status(404).json({ message: "Movie not found." });
+    }
+
+    if (!currentAccount.favorites.includes(movieId)) {
+      return res.status(200).json({ message: "Movie is not favorited." });
+    }
+    currentAccount.favorites = currentAccount.favorites.filter(
+      (favorite) => favorite.toString() !== movieId.toString()
+    );
+
+    await currentAccount.save();
+
+    return res
+      .status(200)
+      .json({ message: "Movie has been removed favorites" });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ message: "Error failed to remove favotire movie." });
   }
 };
 
@@ -191,6 +239,7 @@ export default {
   getAllAccounts,
   getAccountById,
   addFavoriteMovie,
+  removeFavoriteMovie,
   getFavorite,
   updateAccount,
   deleteAccount,

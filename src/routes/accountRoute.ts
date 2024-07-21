@@ -15,9 +15,18 @@ route.post(
 route.get("/", checkJwt, accountController.getAllAccounts);
 
 route.get("/:accountId", checkJwt, accountController.getAccountById);
-route.get("/:accountId/favorites", checkJwt, accountController.getFavorite);
 
-route.patch("/:accountId", checkJwt, accountController.addFavoriteMovie);
+route.get("/:accountId/favorites", checkJwt, accountController.getFavorite);
+route.patch(
+  "/:accountId/favorite",
+  checkJwt,
+  accountController.addFavoriteMovie
+);
+route.patch(
+  "/:accountId/unfavorite",
+  checkJwt,
+  accountController.removeFavoriteMovie
+);
 
 route.patch("/:accountId", checkJwt, accountController.updateAccount);
 
